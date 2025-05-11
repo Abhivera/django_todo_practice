@@ -1,0 +1,38 @@
+{% extends 'todo_app/base.html' %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h1>My Todo List</h1>
+    </div>
+    <div class="col text-end">
+        <a href="{% url 'todo-create' %}" class="btn btn-primary">Add New Todo</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="list-group">
+            {% for todo in todos %}
+                <div class="list-group-item {% if todo.completed %}list-group-item-success{% endif %}">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{ todo.title }}</h5>
+                        <small>Created: {{ todo.created_at|date:"M d, Y" }}</small>
+                    </div>
+                    <p class="mb-1">{{ todo.description|truncatechars:100 }}</p>
+                    <div class="btn-group mt-2">
+                        <a href="{% url 'todo-detail' todo.pk %}" class="btn btn-sm btn-info">View</a>
+                        <a href="{% url 'todo-update' todo.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="{% url 'todo-delete' todo.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                        <a href="{% url 'todo-toggle' todo.pk %}" class="btn btn-sm {% if todo.completed %}btn-secondary{% else %}btn-success{% endif %}">
+                            {% if todo.completed %}Mark Incomplete{% else %}Mark Complete{% endif %}
+                        </a>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="alert alert-info">No todos yet. Add one!</div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
